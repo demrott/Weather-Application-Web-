@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"> 
+<head>
+  <meta charset="UTF-8">
+  <title>Weather Assignment</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/styles.css">
+  <script type="text/javascript" src="fetchxml.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+</head>
+
+<body>
+ <!--  <div class="alert alert-info" id = "info">
+    <table>
+      <tr>
+        <td>Name</td><td>Ademola Alade</td>
+      </tr>
+      <tr>
+        <td>Student No</td><td>A00212817</td>
+      </tr>
+    </table>
+  </div> -->
+  
+  <div class="container">
+    <h1>What's The Weather?</h1>   
+    <form>
+      <div class="form-group">
+        <label for="city">Enter name of a City.</label>
+        <input type="text" class="form-control" id="city"  placeholder="Eg. Athlone, Dublin" value ="">
+      </div>
+      <button type="button" class="btn btn-primary" onclick="grabFile()">Search</button>
+    </form>  
+  </div>
+  
+  <div class="display">
+    <div class="alert alert-success" role="alert">
+      <div id= "location"><b></b></div>
+      <div id= "current"></div>
+      <div id= "bcurrent"></div>
+      <div id="others"></div>
+      <div id="moreinfo">
+        <table id="otherdetails"></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="options" >
+    <div class = "tab">
+      <button class="tablinks" onclick="moredays()" >7 Days</button>
+      <button class="tablinks" onclick="temp()">Charts</button>
+      <button class="tablinks" onclick="about()"> About</button>
+    </div> 
+
+    <div id="moredays">
+      <div class="alert alert-success" role="alert" >
+        <div>
+          <table id="7days">
+          </table>
+        </div>
+        <div id="myChart">
+          <div id="btnChart">
+            <button onclick="presschart()"> Pressure </button>
+            <button onclick="humiditychart();"> Humidity</button>
+            <button onclick="temp()"> Temperature</button>
+            <button onclick="wind()"> Wind</button>
+          </div>
+          <div id="chart"></div>
+        </div>
+        <div id="about">
+          <p>The underlying theme of this project is a weather forecast application. 
+            <p>The application prompts the user to enter a city to which they are then presented with a table detailing the weather forecast of the city for the coming seven days.
+             <p>This table displays such information like cloud cover, temperature and wind direction among other information. 
+               <p>The user can also navigate through the website easily using the navigation bar on the top of the page.
+                
+                
+               </div>
+               
+             </div>
+           </div>
+           
+           
+         </div>
+       </div>
+
+     </div>
+
+   </body>
+   </html>

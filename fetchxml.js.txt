@@ -1,0 +1,476 @@
+"use strict";
+var $ = function (id) {
+	return document.getElementById(id);
+};
+var data2;
+var data3;
+
+function getHTTPObject() {
+	var xhr = false;
+	if (window.XMLHttpRequest) {
+		xhr = new XMLHttpRequest();
+	} else if (window.ActiveXObject) {
+		try {
+			xhr = new ActiveXObject("Msxml2.XMLHTTP");
+		} catch (e) {
+			try {
+				xhr = new ActiveXObject("Microsoft.XMLHTTP");
+			} catch (e) {
+				xhr = false;
+			}
+		}
+	}
+	return xhr;
+}
+
+function grabFile() {
+	var search = $("input[id=city]").val();
+
+	if (search == "") {
+		alert("Enter City");
+	} else {
+		var request = getHTTPObject();
+		if (request) {
+			request.onreadystatechange = function () {
+				parseResponse(request);
+			};
+			request.open("GET", "http://api.openweathermap.org/data/2.5/forecast/daily?q=" + search
+				 + "&appid=31eb89c4bb2a117e4cca87adf1e81dec&units=metric&mode=xml", true);
+
+			request.send(null);
+		}
+	}
+}
+
+function parseResponse(request) {
+	if (request.readyState == 4) {
+		if (request.status == 200 || request.status == 304) {
+			var data = request.responseXML;
+			data2 = data;
+			data3 = data;
+
+			var country = data.getElementsByTagName("name")[0].firstChild.nodeValue;
+			document.getElementById("location").innerHTML = "<b>Current Weather<br>CITY: </b>" + country;
+
+			var symbol = data.getElementsByTagName("symbol")[0].getAttribute("var");
+			var s = "http://openweathermap.org/img/w/" + symbol + ".png";
+			var x = document.createElement("IMG");
+			x.setAttribute("src", s);
+			x.setAttribute("width", "80");
+			x.setAttribute("height", "80");
+			$('#current').html(x);
+
+			var date = data.getElementsByTagName("time")[0].getAttribute("day");
+			var symbol1 = data.getElementsByTagName("symbol")[0].getAttribute("name");
+
+			$('#others').html(symbol1 + "<br> <b>DATE: </b> " + date + "<br>");
+
+			var temp = data.getElementsByTagName("temperature")[0].getAttribute("day");
+
+			$('#bcurrent').html(temp + "&degC");
+
+			//WIND Details
+			var wind = data.getElementsByTagName("windSpeed")[0].getAttribute("mps");
+			var wind1 = data.getElementsByTagName("windSpeed")[0].getAttribute("name");
+
+			//PRESSURE Details
+			var pressure = data.getElementsByTagName("pressure")[0].getAttribute("value");
+			var pressure1 = data.getElementsByTagName("pressure")[0].getAttribute("unit");
+
+			//HUMIDITY Details
+			var humidity = data.getElementsByTagName("humidity")[0].getAttribute("value");
+			var humidity1 = data.getElementsByTagName("humidity")[0].getAttribute("unit");
+
+			//CLOUD Details
+			var cloud = data.getElementsByTagName("clouds")[0].getAttribute("value");
+
+			//TABLE
+			var table = "<table> <tr><td><b> WIND: </b></td><td>" + wind + " m/s " + wind1 + "</td></tr>" +
+				"<tr><td><b> PRESSURE: </b></td><td>" + pressure + " " + pressure1 + "</td></tr>" +
+				"<tr><td><b> HUMIDITY: </b></td><td>" + humidity + humidity1 + "</td></tr>" +
+				"<tr><td><b> CLOUD: </b></td><td>" + cloud + "</td></tr>" +
+				"</table>";
+			document.getElementById("otherdetails").innerHTML = table;
+			moredays();
+
+			$('.display').css({
+				'display': 'block'
+			});
+			$('.options').css({
+				'display': 'block'
+			});
+		}
+	}
+}
+
+function moredays() {
+	$('#chart').css({
+		'display': 'none'
+	});
+	$('#7days').css({
+		'display': 'block'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#myChart').css({
+		'display': 'none'
+	});
+
+	var date = data2.getElementsByTagName("time");
+	var table = "<tr><th>Date</th><th>Weather</th><th>Temp</th><th>Wind</th><th>Pressure (unit)</th><th>Humidity</th><th>Cloud</th></tr>";
+	for (var i = 0; i < date.length; i++) {
+		//Date
+		var myDate = date[i].getAttribute("day");
+
+		//Symbol
+		var symbol = data2.getElementsByTagName("symbol");
+		var y = symbol[i].getAttribute("var");
+		var x = symbol[i].getAttribute("name");
+		var pic = "<img src=http://openweathermap.org/img/w/" + y + ".png>";
+
+		//Temperature
+		var temp = data2.getElementsByTagName("temperature")
+			var myTemp = temp[i].getAttribute("day");
+
+		//Wind and Wind Direction
+		var wind = data2.getElementsByTagName("windSpeed");
+		var myWind = wind[i].getAttribute("mps");
+		var myWind1 = wind[i].getAttribute("name");
+		var direction = data2.getElementsByTagName("windDirection");
+		var myDirect = direction[i].getAttribute("name");
+		var myDirect1 = direction[i].getAttribute("deg");
+
+		//Pressure
+		var press = data2.getElementsByTagName("pressure");
+		var mypress = press[i].getAttribute("value");
+		var mypress1 = press[i].getAttribute("unit");
+
+		//Humidity
+		var hum = data2.getElementsByTagName("humidity");
+		var myhumidity = hum[i].getAttribute("value");
+		var myhumidity1 = hum[i].getAttribute("unit");
+
+		//Cloud
+		var cloud = data2.getElementsByTagName("clouds");
+		var myCloud = cloud[i].getAttribute("value")
+
+			table += "<tr><td>" + myDate +
+			"</td><td>" + pic + " " + x +
+			"</td><td>" + myTemp + "&degC" +
+			"</td><td>" + myWind + " m/s " + myWind1 + "<br>" + myDirect1 + "&deg" + " " + myDirect +
+			"</td><td>" + mypress + " " + mypress1 +
+			"</td><td>" + myhumidity + myhumidity1 +
+			"</td><td>" + myCloud + "</td></tr>";
+
+		document.getElementById("7days").innerHTML = table;
+	}
+
+}
+
+function temp() {
+	$('#myChart').css({
+		'display': 'block'
+	});
+	$('#chart').css({
+		'display': 'block'
+	});
+	$('#7days').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#btnChart').css({
+		'display': 'block'
+	});
+
+	var t = [];
+
+	var date = data2.getElementsByTagName("time");
+	var d = date[0].getAttribute("day");
+	var res = parseInt(d.slice(8, 10));
+
+	for (var i = 0; i < date.length; i++) {
+		//var myDate = date[i].getAttribute("day");
+		var temp = data2.getElementsByTagName("temperature");
+		var temp1 = temp[i].getAttribute("day");
+		t.push(parseInt(temp1));
+
+	}
+
+	Highcharts.chart('chart', {
+
+		title: {
+			text: 'Charts For the 7 days Weather Forecast'
+		},
+
+		subtitle: {
+			text: 'Source: openweather.com'
+		},
+
+		yAxis: {
+			title: {
+				text: 'Unit degres'
+			}
+		},
+		xAxis: {
+			title: {
+				text: 'Dates'
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+
+		plotOptions: {
+			series: {
+				pointStart: res
+			}
+		},
+
+		series: [{
+				name: 'Temperature',
+				data: t
+			}
+		]
+
+	});
+}
+
+function wind() {
+	$('#chart').css({
+		'display': 'block'
+	});
+	$('#7days').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#btnChart').css({
+		'display': 'block'
+	});
+
+	var w = [];
+
+	var date = data2.getElementsByTagName("time");
+	var d = date[0].getAttribute("day");
+	var res = parseInt(d.slice(8, 10));
+
+	for (var i = 0; i < date.length; i++) {
+
+		var wind = data2.getElementsByTagName("windSpeed");
+		var myWind = wind[i].getAttribute("mps");
+		w.push(parseInt(myWind));
+
+	}
+
+	Highcharts.chart('chart', {
+
+		title: {
+			text: 'Charts For the 7 days Weather Forecast'
+		},
+
+		subtitle: {
+			text: 'Source: openweather.com'
+		},
+
+		yAxis: {
+			title: {
+				text: 'Unit m/s'
+			}
+		},
+		xAxis: {
+			title: {
+				text: 'Dates'
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+
+		plotOptions: {
+			series: {
+				pointStart: res
+			}
+		},
+
+		series: [{
+				name: 'Wind',
+				data: w
+			}
+		]
+
+	});
+}
+
+function presschart() {
+	$('#chart').css({
+		'display': 'block'
+	});
+	$('#7days').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#btnChart').css({
+		'display': 'block'
+	});
+
+	var p = [];
+
+	var date = data2.getElementsByTagName("time");
+	var d = date[0].getAttribute("day");
+	var res = parseInt(d.slice(8, 10));
+
+	for (var i = 0; i < date.length; i++) {
+
+		var press = data2.getElementsByTagName("pressure");
+		var mypress = press[i].getAttribute("value");
+		p.push(parseInt(mypress));
+
+	}
+
+	Highcharts.chart('chart', {
+
+		title: {
+			text: 'Charts For the 7 days Weather Forecast'
+		},
+
+		subtitle: {
+			text: 'Source: openweather.com'
+		},
+
+		yAxis: {
+			title: {
+				text: 'Unit hPa'
+			}
+		},
+		xAxis: {
+			title: {
+				text: 'Dates'
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+
+		plotOptions: {
+			series: {
+				pointStart: res
+			}
+		},
+
+		series: [{
+				name: 'Pressure',
+				data: p
+			}
+		]
+
+	});
+}
+
+function humiditychart() {
+	$('#chart').css({
+		'display': 'block'
+	});
+	$('#7days').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#btnChart').css({
+		'display': 'block'
+	});
+
+	var h = [];
+
+	var date = data2.getElementsByTagName("time");
+	var d = date[0].getAttribute("day");
+	var res = parseInt(d.slice(8, 10));
+
+	for (var i = 0; i < date.length; i++) {
+
+		var hum = data2.getElementsByTagName("humidity");
+		var myhumidity = hum[i].getAttribute("value")
+			h.push(parseInt(myhumidity));
+
+	}
+
+	Highcharts.chart('chart', {
+
+		title: {
+			text: 'Charts For the 7 days Weather Forecast'
+		},
+
+		subtitle: {
+			text: 'Source: openweather.com'
+		},
+
+		yAxis: {
+			title: {
+				text: 'Unit %'
+			}
+		},
+		xAxis: {
+			title: {
+				text: 'Dates'
+			}
+		},
+		legend: {
+			layout: 'vertical',
+			align: 'right',
+			verticalAlign: 'middle'
+		},
+
+		plotOptions: {
+			series: {
+				pointStart: res
+			}
+		},
+
+		series: [{
+				name: 'Humidity',
+				data: h,
+
+			}
+		]
+
+	});
+}
+
+function about() {
+	$('#chart').css({
+		'display': 'none'
+	});
+	$('#7days').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'none'
+	});
+	$('#btnChart').css({
+		'display': 'none'
+	});
+	$('#about').css({
+		'display': 'block'
+	});
+}
+
+window.onload = function () {
+	$('.display').css({
+		'display': 'none'
+	});
+	$('.options').css({
+		'display': 'none'
+	});
+}

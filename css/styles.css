@@ -1,0 +1,133 @@
+body{
+ background: url("../images/background.png"); 
+ -webkit-background-size: cover;
+ -moz-background-size: cover;
+ -o-background-size: cover;
+ background-size: cover;
+ background-repeat: no-repeat;
+ background-attachment: fixed;
+ background-position: center; 
+}
+.container{
+  text-align: center;
+  margin-top: 50px;
+  width: 450px;
+}
+.alert alert-success{
+  width:400px;
+}
+input{
+  margin: 20px 0;
+}
+.display{
+  
+  margin-top:10px;
+  height: 316px;
+  width: 400px; 
+  margin-left:10px;
+  float:left;
+  
+}
+
+
+div.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+}
+.options {
+  
+ 
+  border-left: none;
+  height: 486px;
+  margin-top:10px;
+  margin-right:10px;
+  float:right;
+  width: 900px;
+  
+}
+
+
+div.tab {
+  overflow: hidden;
+  
+  background-color: #f1f1f1;
+}
+#btnChart{
+	
+background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+ overflow: hidden;
+ text-align: center;
+ margin-bottom: 10px;
+ width:100%;
+ background-color: #dff0d8;
+}
+#myChart{
+	background:#dff0d8;
+}
+
+div.tab button:hover {
+  background-color: #dff0d8;
+}
+.tabcontent {
+  float: left;
+  
+  width: 68%;
+  height: 300px;
+}
+
+#current{
+  width:70px;
+  height:65px;  
+  float: left;
+}
+#bcurrent{
+  font-size:20px;
+  width:100px;
+  height:40px;  
+  float: left;
+  margin-left:15px;
+  margin-top:15px;
+}
+#location{
+  margin-left:0px;
+  
+  width:350px;
+  font-size:20px; 
+}
+#others{
+ font-size:16px;
+ margin-top:65px;
+ width: 200px;
+ height:50px;
+}
+table,th,td{
+  border: 1px solid black;
+}
+#moredays{
+  
+  width:100%;
+}
+#chart {
+  min-width: 310px;
+  max-width: 800px;
+  height: 400px;
+  margin: 0 auto;
+  
+}
+#info{
+  width:300px;
+}
+#infotable{
+  width: 100px;
+}
+
